@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LeiMaiTech – Memory Alive</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+        content="AI-powered emotional memory service. Gently bring one precious photo to life as a short animated video. Free first memory preview." />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-alt: #ffffff;
+      --card: #f9fafb;
+      --text: #111827;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --border: #e5e7eb;
+      --danger: #b91c1c;
+      --max-width: 960px;
+      --radius-lg: 18px;
+      --shadow-soft: 0 22px 55px rgba(15, 23, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 28px 16px 72px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      font-size: 15px;
+      text-transform: uppercase;
+    }
+
+    .logo-img {
+      height: 32px;
+      width: 32px;
+      border-radius: 999px;
+      object-fit: cover;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.35);
+      background: #000;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    nav a {
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.18s ease-out;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    /* hero */
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: 36px;
+      align-items: center;
+      margin-bottom: 52px;
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 5vw, 40px);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 36rem;
+      margin-bottom: 20px;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+      font-size: 12px;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(37, 99, 235, 0.18);
+      background: rgba(219, 234, 254, 0.85);
+      color: #1d4ed8;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .btn-primary {
+      padding: 11px 20px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      color: #fff;
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.35);
+      transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 38px rgba(37, 99, 235, 0.42);
+    }
+
+    .btn-ghost {
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(249, 250, 251, 0.9);
+      color: var(--muted);
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .hero-note {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .hero-media {
+      background: radial-gradient(circle at top left, #eef2ff 0, #e5e7eb 40%, #ffffff 100%);
+      border-radius: 24px;
+      padding: 16px 16px 18px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .hero-tag {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      padding: 4px 9px;
+      font-size: 11px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.86);
+      color: #e5e7eb;
+    }
+
+    .hero-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      align-items: center;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    .hero-still,
+    .hero-video-wrap {
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      background: #000;
+      aspect-ratio: 4 / 3;
+    }
+
+    .hero-still {
+      background-image: url("photo_1_2025-11-04_06-36-25.jpg");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero-label {
+      position: absolute;
+      bottom: 8px;
+      left: 10px;
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.75);
+      color: #e5e7eb;
+    }
+
+    .hero-label.green {
+      background: rgba(34, 197, 94, 0.9);
+      color: #f9fafb;
+    }
+
+    .hero-video-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-caption {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    section {
+      margin-bottom: 52px;
+    }
+
+    h2.section-title {
+      font-size: 22px;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-lead {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 22px;
+      max-width: 40rem;
+    }
+
+    /* story */
+
+    .story-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 20px 20px 18px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .story-card p {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .story-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .story-tag {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .story-highlight {
+      font-style: italic;
+    }
+
+    /* steps */
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 16px;
+    }
+
+    .step {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 16px 16px 14px;
+      border: 1px solid var(--border);
+    }
+
+    .step-number {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #4b5563;
+      margin-bottom: 4px;
+    }
+
+    .step-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .step p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* offer */
+
+    .offer-box {
+      background: linear-gradient(135deg, #dbeafe, #fef9c3);
+      border-radius: var(--radius-lg);
+      padding: 20px 20px 18px;
+      border: 1px solid rgba(37, 99, 235, 0.4);
+      box-shadow: 0 20px 40px rgba(148, 163, 184, 0.4);
+    }
+
+    .offer-box h3 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .offer-box p {
+      font-size: 14px;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+
+    .offer-box ul {
+      margin-left: 18px;
+      margin-top: 4px;
+      font-size: 13px;
+      color: #374151;
+    }
+
+    /* examples */
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .example-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 14px 14px 14px;
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+    }
+
+    .example-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .example-pair {
+      display: grid;
+      grid-template-columns: 0.7fr 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .example-still {
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 4 / 3;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .example-still.one {
+      background-image: url("photo_1_2025-11-04_06-36-25.jpg");
+    }
+
+    .example-still.two {
+      background-image: url("photo_2_2025-11-04_06-36-25.jpg");
+    }
+
+    .example-still-label {
+      position: absolute;
+      bottom: 6px;
+      left: 8px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      font-size: 10px;
+      background: rgba(15, 23, 42, 0.75);
+      color: #e5e7eb;
+    }
+
+    .example-video {
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+      aspect-ratio: 4 / 3;
+    }
+
+    .example-video video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .example-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* pricing */
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .plan {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 16px;
+      border: 1px solid var(--border);
+    }
+
+    .plan.highlight {
+      border-color: rgba(37, 99, 235, 0.8);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .plan-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .plan-tagline {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .plan-price {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .plan ul {
+      margin-left: 18px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .plan-note {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* privacy */
+
+    .privacy-box {
+      background: #0f172a;
+      color: #e5e7eb;
+      border-radius: var(--radius-lg);
+      padding: 20px 20px 18px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.7);
+    }
+
+    .privacy-box h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .privacy-box p {
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .privacy-box ul {
+      font-size: 13px;
+      margin-left: 18px;
+      margin-top: 4px;
+    }
+
+    /* faq */
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .faq-item h3 {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .faq-item p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* form */
+
+    .form-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 20px 20px 18px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px 16px;
+      margin-top: 14px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13px;
+    }
+
+    .form-field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: 500;
+    }
+
+    label span {
+      font-weight: 400;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 8px 9px;
+      font-size: 13px;
+      font-family: inherit;
+      background: #f9fafb;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .consent input {
+      margin-top: 2px;
+    }
+
+    .form-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 16px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .error {
+      color: var(--danger);
+      font-size: 12px;
+      display: none;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+      padding-top: 18px;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      nav {
+        font-size: 13px;
+      }
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .hero-media {
+        order: -1;
+      }
+      main {
+        padding-inline: 16px;
+      }
+      .hero-pair {
+        grid-template-columns: 1fr;
+      }
+      .example-pair {
+        grid-template-columns: 1fr;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="logo">
+      <img src="LeiMai.png" alt="LeiMaiTech logo" class="logo-img" />
+      <div>LEIMAITECH • MEMORY ALIVE</div>
+    </div>
+    <nav>
+      <a href="#story">Story</a>
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#start">Start free</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div>
+      <h1 class="hero-title">Bring a precious memory gently back to life.</h1>
+      <p class="hero-subtitle">
+        Share one old group photo. I turn it into a short, life-like animated moment of you and your loved one,
+        crafted with respect, privacy, and care.
+      </p>
+      <div class="hero-badges">
+        <div class="badge">
+          <span>💙</span>
+          <span>Free first memory for everyone</span>
+        </div>
+        <div class="badge">
+          <span>🔒</span>
+          <span>Private & confidential</span>
+        </div>
+        <div class="badge">
+          <span>₮</span>
+          <span>USDT payments for extra videos</span>
+        </div>
+      </div>
+      <div class="hero-cta">
+        <button class="btn-primary" onclick="scrollToSection('start')">
+          Start free memory preview
+        </button>
+        <button class="btn-ghost" onclick="scrollToSection('how')">
+          See how it works
+        </button>
+      </div>
+      <div class="hero-note">
+        No obligation. If it does not feel right, everything is deleted.
+      </div>
+    </div>
+
+    <div class="hero-media">
+      <div class="hero-tag">From still photo to living memory</div>
+      <div class="hero-pair">
+        <div class="hero-still">
+          <div class="hero-label">Original still photo</div>
+        </div>
+        <div class="hero-video-wrap">
+          <video
+            src="memory_sample_1.mp4"
+            autoplay
+            muted
+            loop
+            playsinline
+          ></video>
+          <div class="hero-label green">Animated memory</div>
+        </div>
+      </div>
+      <div class="hero-caption">
+        One childhood moment with my brother. The original photo was still.
+        The animation adds only tiny motions, but the feeling is huge.
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <section id="story">
+    <h2 class="section-title">Why I started this project</h2>
+    <p class="section-lead">
+      This is not a big company product. It began as my own way of saying sorry and goodbye to my brother.
+    </p>
+
+    <div class="story-card">
+      <div class="story-tag">Personal story</div>
+      <p>
+        My name is LeiMai. In 2023, my older brother was struggling badly with money and life.
+        I thought giving him space might help, so I slowly distanced myself.
+      </p>
+      <p>
+        On New Year’s Eve of 2024, he took his own life by charcoal burning.
+        For a long time, I could not forgive myself.
+      </p>
+      <p>
+        Months later, I found our old childhood photos. I used AI to make them move again —
+        just small motions: a blink, a breath, a tiny smile.
+      </p>
+      <p class="story-highlight">
+        When I watched that short animated photo, I cried harder than ever, but something inside finally softened.
+        It reminded me of how much love was still there, beyond all my regrets.
+      </p>
+      <p>
+        That moment changed me. I realized this technology should not only be for fun or filters.
+        It can help people hold a quiet, healing moment with someone they miss deeply.
+      </p>
+      <p>
+        This is why I offer one free memory animation for everyone.
+        If it touches your heart, you can choose to create more.
+      </p>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <h2 class="section-title">How it works</h2>
+    <p class="section-lead">
+      A simple four-step process. You first share your story and who is in the photo.
+      I then ask you for the actual file by email and create a private 8-second memory just for you.
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">Step 1</div>
+        <div class="step-title">Fill a short, gentle form</div>
+        <p>
+          Tell me who is in the photo with you, what your relationship is, and what kind of feeling
+          you hope to touch again. No files yet, only words.
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-number">Step 2</div>
+        <div class="step-title">I reply and ask for your photo</div>
+        <p>
+          After I read your message, I personally reply to your email.
+          You can then send one group photo as an attachment in a private conversation.
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-number">Step 3</div>
+        <div class="step-title">I craft a short animated memory</div>
+        <p>
+          Using AI and manual tweaking, I bring subtle movement into the photo:
+          breathing, blinking, a soft head tilt or smile. No jokes, no exaggeration.
+          Each clip is around 8 seconds in 1080p.
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-number">Step 4</div>
+        <div class="step-title">Receive a private preview</div>
+        <p>
+          Within about 24 hours after you send your photo,
+          you receive a downloadable ~8 second video by email or Telegram.
+          If it feels right, you can ask for more memories or a longer story video.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FREE OFFER -->
+  <section id="offer">
+    <div class="offer-box">
+      <h3>One free memory for everyone</h3>
+      <p>
+        To keep this project honest, I begin with one free animated memory for each person.
+        No payment, no credit card, no obligation.
+      </p>
+      <p>You receive:</p>
+      <ul>
+        <li>1 group photo (sent later by email) animated into a short ~8 second video</li>
+        <li>1080p resolution, ready to keep on your phone or computer</li>
+        <li>Delivered privately within about 24 hours after I receive your photo</li>
+      </ul>
+      <p>
+        If the preview touches you and you wish to create more memories or a longer video,
+        we can continue with simple per-photo pricing in USDT.
+      </p>
+    </div>
+  </section>
+
+  <!-- EXAMPLES -->
+  <section id="examples">
+    <h2 class="section-title">A glimpse of what it feels like</h2>
+    <p class="section-lead">
+      These are my own family memories — old still photos turned softly into motion.
+      The movements are small, but the emotion can be very strong.
+    </p>
+
+    <div class="examples-grid">
+      <div class="example-card">
+        <div class="example-title">Childhood on the stairs</div>
+        <div class="example-pair">
+          <div class="example-still one">
+            <div class="example-still-label">Before</div>
+          </div>
+          <div class="example-video">
+            <video
+              src="memory_sample_1.mp4"
+              autoplay
+              muted
+              loop
+              playsinline
+            ></video>
+          </div>
+        </div>
+        <div class="example-note">
+          A simple afternoon with my father and brother.
+          Seeing it move again helped me remember the warmth, not only the loss.
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="example-title">Brothers at the football net</div>
+        <div class="example-pair">
+          <div class="example-still two">
+            <div class="example-still-label">Before</div>
+          </div>
+          <div class="example-video">
+            <video
+              src="memory_sample_2.mp4"
+              autoplay
+              muted
+              loop
+              playsinline
+            ></video>
+          </div>
+        </div>
+        <div class="example-note">
+          Two brothers resting on the field. Tiny motions, soft breathing, and a quiet smile bring the moment back.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <h2 class="section-title">Simple pricing if you want more</h2>
+    <p class="section-lead">
+      Only after your free preview. You decide calmly whether to continue.
+      Each memory clip is around 8 seconds in 1080p. Payments are in USDT.
+    </p>
+
+    <div class="pricing-grid">
+      <div class="plan">
+        <div class="plan-name">Free preview</div>
+        <div class="plan-tagline">First gentle memory for everyone</div>
+        <div class="plan-price">0 USDT</div>
+        <ul>
+          <li>1 group photo, sent later by email</li>
+          <li>~8 second animated memory video, 1080p</li>
+          <li>Private download link via email or Telegram</li>
+        </ul>
+        <div class="plan-note">No obligation. You can stop here at any time.</div>
+      </div>
+      <div class="plan highlight">
+        <div class="plan-name">Single memory set</div>
+        <div class="plan-tagline">For one special moment you want to keep</div>
+        <div class="plan-price">25 USDT</div>
+        <ul>
+          <li>Up to 3 photos, each animated into its own ~8 second clip</li>
+          <li>Edited together into one 20–30 second video, 1080p</li>
+          <li>Optional soft piano background, no voices or lyrics</li>
+        </ul>
+        <div class="plan-note">Paid safely with USDT (TRC20 or ERC20).</div>
+      </div>
+      <div class="plan">
+        <div class="plan-name">Family story film</div>
+        <div class="plan-tagline">Several memories stitched into one story</div>
+        <div class="plan-price">60 USDT</div>
+        <ul>
+          <li>Up to 5–7 photos animated and sequenced</li>
+          <li>Approx. 40–60 second story video, up to 4K</li>
+          <li>Gentle music and pacing built around your story</li>
+        </ul>
+        <div class="plan-note">Custom ideas are welcome; we can discuss by email or Telegram.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVACY -->
+  <section id="privacy">
+    <div class="privacy-box">
+      <h3>Privacy, consent, and respect first</h3>
+      <p>
+        These are not just files. They are people you love. I handle every project with the same care I wish
+        I had shown my brother when he was still here.
+      </p>
+      <ul>
+        <li>I never publish or share your photos or videos.</li>
+        <li>All raw files are deleted within 24 hours after final delivery.</li>
+        <li>I do not create political content, fake news, or joke deepfakes.</li>
+        <li>You can request full deletion at any time with a single message.</li>
+      </ul>
+      <p>
+        This project exists only to hold space for grief, nostalgia, and love.
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <h2 class="section-title">Questions you might have</h2>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h3>What kind of photo works best?</h3>
+        <p>
+          A clear group photo where faces are visible and not heavily blurred.
+          Old printed photos are fine as long as you can see the eyes and expressions.
+        </p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I use very old or low-quality photos?</h3>
+        <p>
+          Yes. I will do my best with what you have. Sometimes the imperfections add to the feeling.
+          If a photo is not suitable, I will tell you honestly.
+        </p>
+      </div>
+      <div class="faq-item">
+        <h3>How long does it take to receive the preview?</h3>
+        <p>
+          Usually within about 24 hours after you send your photo.
+          If I am overloaded, I will inform you before starting.
+        </p>
+      </div>
+      <div class="faq-item">
+        <h3>How do I pay in USDT if I want more?</h3>
+        <p>
+          After you confirm you want a paid memory, I send you a USDT wallet address
+          (TRC20 or ERC20) and the exact amount. You keep the transaction ID as proof.
+        </p>
+      </div>
+      <div class="faq-item">
+        <h3>Can you add sound or voice?</h3>
+        <p>
+          For now I focus on silent or soft-music videos, not synthetic voices.
+          In the future, I may add gentle voice options if they can be done respectfully.
+        </p>
+      </div>
+      <div class="faq-item">
+        <h3>What if I do not like the result?</h3>
+        <p>
+          Tell me honestly. For free previews there is no problem at all.
+          For paid memories we can adjust within reason, or I can delete everything if you prefer.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section id="start">
+    <h2 class="section-title">Start your free memory preview</h2>
+    <p class="section-lead">
+      This form helps me understand your relationship and the kind of moment you wish to feel again.
+      Your answers are seen only by me and are handled in strict confidence.
+      After I read them, I will reply by email and ask you to send one photo privately.
+    </p>
+
+    <div class="form-card">
+      <form
+        id="memory-form"
+        action="https://formspree.io/f/mgvpjnvr"
+        method="POST"
+        onsubmit="return handleSubmit(event)"
+      >
+        <!-- For Formspree: email subject / language -->
+        <input type="hidden" name="_subject" value="New Memory Alive request" />
+        <input type="hidden" name="_language" value="en" />
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="name">Your name or nickname</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+
+          <div class="form-field">
+            <label for="email">Email <span>(for delivery and reply)</span></label>
+            <input type="email" id="email" name="email" required />
+          </div>
+
+          <div class="form-field">
+            <label for="telegram">Telegram handle <span>(optional)</span></label>
+            <input type="text" id="telegram" name="telegram" placeholder="@yourhandle" />
+          </div>
+
+          <div class="form-field">
+            <label for="who">
+              Who is in this photo with you?
+              <span>(for example: my older brother, my grandmother…)</span>
+            </label>
+            <input type="text" id="who" name="who" required />
+          </div>
+
+          <div class="form-field">
+            <label for="future_photos">
+              In the future, how many photos might you want to animate in total?
+            </label>
+            <select id="future_photos" name="future_photos">
+              <option value="1">Just this one for now</option>
+              <option value="2-3">Maybe 2–3 photos</option>
+              <option value="4-5">Maybe 4–5 photos</option>
+              <option value="more">I am not sure yet</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="direction">
+              Do you prefer a specific gesture or feeling,
+              <span>or should I decide based on your story?</span>
+            </label>
+            <select id="direction" name="direction">
+              <option value="free">Please decide freely</option>
+              <option value="smile">Gentle smile</option>
+              <option value="wave">Small hand wave</option>
+              <option value="look">Just breathing and looking at the camera</option>
+              <option value="other">I will describe below</option>
+            </select>
+          </div>
+
+          <div class="form-field full">
+            <label for="story">
+              Is there a story or memory you want to share about this moment?
+              <span>(optional but very helpful)</span>
+            </label>
+            <textarea
+              id="story"
+              name="story"
+              placeholder="You can share anything you feel comfortable sharing. This helps me craft the animation with the right emotion."
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="consent">
+          <input type="checkbox" id="consent" name="consent" required />
+          <label for="consent">
+            I understand that when I later send my photo, it will be used only to create this memory video
+            and will be deleted after delivery. I can request full deletion at any time.
+          </label>
+        </div>
+
+        <div class="form-footer">
+          <span id="error-message" class="error">
+            Please complete all required fields and consent.
+          </span>
+          <button type="submit" class="btn-primary">
+            Submit and start my free memory
+          </button>
+          <span>
+            After you submit, I will reply by email to ask for one photo file.
+            Once I receive it, your preview is usually ready within about 24 hours.
+          </span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div>© <span id="year"></span> LeiMaiTech Studio – Memory Alive</div>
+    <div>
+      Contact: <a href="mailto:leimai2023@gmail.com">leimai2023@gmail.com</a>
+    </div>
+  </footer>
+
+  <!-- SIGNATURE & BLESSING -->
+  <section id="closing" style="text-align:center; margin-top:60px; margin-bottom:40px;">
+    <p class="blessing" style="font-size:14px; color:#4b5563; margin-bottom:10px;">
+      May peace find you when you remember.
+    </p>
+    <img src="assets/LeiMaiSing.png"
+         alt="LeiMai signature"
+         style="width:160px; opacity:0.8; display:block; margin:12px auto;">
+  </section>
+</main>
+
+<script>
+  function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  document.getElementById("year").textContent =
+    new Date().getFullYear().toString();
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const consent = document.getElementById("consent");
+    const error = document.getElementById("error-message");
+
+    if (!consent.checked) {
+      error.textContent =
+        "Please confirm consent so I can handle your memory safely.";
+      error.style.display = "block";
+      return false;
+    }
+    error.style.display = "none";
+
+    const form = event.target;
+    const data = new FormData(form);
+
+    fetch(form.action, {
+      method: form.method,
+      body: data,
+      headers: { Accept: "application/json" }
+    })
+      .then((response) => {
+        if (response.ok) {
+          form.innerHTML = `
+          <div style="text-align:center; padding:40px 20px;">
+            <h3 style="color:#2563eb; margin-bottom:8px;">Thank you 🌿</h3>
+            <p style="color:#374151;">Your message has been received.<br>
+            I’ll reply to you within 72 hours to request your photo file.</p>
+          </div>`;
+        } else {
+          alert("Something went wrong. Please try again later.");
+        }
+      })
+      .catch(() =>
+        alert("Network error. Please try again later.")
+      );
+
+    return false;
+  }
+</script>
+</body>
+</html>
